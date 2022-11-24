@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserUpdateRequest extends FormRequest
+class UserStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,17 +24,18 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'photo' => 'mimes:jpeg,jpg,png,PNG,JPG',
-            'email' => 'email',
+            'name' => 'required',
+            'email' => 'email|unique:users',
             'phone' => 'numeric',
-            'city'  => 'required|string'
+            'city'  => 'required',
+            'password' => 'required',
+            'user_type' => 'required'
         ];
     }
 
     public function messages()
     {
         return [
-            'photo.mimes' => ':attribute must be a file type:(jpeg,jpg,png,PNG,JPG)',
             'email.unique' => ':attribute already exits',
             'email.email' => ':attribute must be a valid email',
             'required' => ':attribute required field',

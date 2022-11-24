@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
-
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -19,38 +20,78 @@ class UserController extends Controller
         return view('profile', array('user' => Auth::user()));
     }
 
-    public function update(UserUpdateRequest $request, User $user){
+    public function show(){
+        $user = User::all();
+        return view('users.index', ['user' => 'users', 'users' => $user]);
+    }
+
+    public function create(){
+        $user = Auth::user();
+        return view('users.create', ['user' => 'users', 'users' => $user]);
+    }
+
+    public function edit($id){
+        $user = auth()->user();
+        $user = User::findOrFail($id);
+        return view('users.edit', [ 'user' => $user]);
+    }
+
+    public function store(UserStoreRequest $request){
+        $user = Auth::user();
+
+        $user = new User;
+        $user -> name = $request->name;
+        $user -> email = $request->email;
+        $user -> phone = $request->phone;
+        $user -> city = $request->city;
+        $user -> password = Hash::make($request->password);
+        $user -> user_type = $request->user_type;
+        $user -> photo = $request->photo;
+
+        $user->save();
+        return view('home')->with('msg', 'User created successfuly!');
+    }
+
+    public function update(UserUpdateRequest $request){
 
             $user = Auth::user();
 
             if($request->hasFile('photo')){
-                $destination = 'user_photos/'.$user->photo;
-                if(File::exists($destination === 'default.jpg')){
-                    $user->photo = "default.jpg";
-                }else{
-                    File::delete($destination);
-                }
                 $file = $request->file('photo');
                 $extension = $file->getClientOriginalExtension();
                 $filename = time().'.'.$extension;
                 $file->move('user_photos/', $filename);
-                $user->photo = $filename;
-            }else{
-                $user->photo = "default.jpg";
             }
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'city' => $request->city,
-        ]);
+        $user->update
+            ([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'city' => $request->city,
+                'password' => (empty($request->password)) ? $user->password : Hash::make($request->password),
+                'photo' =>  isset($filename) ?  $filename : $user->photo
+            ]);
         $user->save();
         return redirect('profile')->with('msg' ,'Updated successfuly!');
     }
 
-    public function destroy(){
-        $user = Auth::user();
+    public function update1(User $user, UserUpdateRequest $request){
+
+       $user->update
+        ([
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'city' => $request->city,
+        'user_type' => $request->user_type
+        ]);
+        $user->save();
+        return view('home')->with('msg', 'Updated Successfuly!');
+    }
+
+    public function destroy($id){
+        $user = User::findOrFail($id);
         if($user->photo === 'default.jpg'){
             $user->delete();
         }else{

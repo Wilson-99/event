@@ -9,6 +9,7 @@
                 <div class="card-header"><h3>{{ __('User Datas') }}</h3></div>
                 <form action="/profile" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
                 <div class="card-body">
                 <div class="form-group">
                   <label><b>Full Name</b></label>
@@ -22,7 +23,7 @@
                 </div>
                 <div class="form-group">
                   <label for="exampleInputSenha1"><b>Password</b></label>
-                  <input type="password" name="password" required class="form-control @error('password') is-invalid @enderror" id="senha" value="{{ $user->password ?? old('password') }}">
+                  <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="senha" value="{{old('password') ? old('password') : ''}}">
                    <div class="invalid-feedback">{{ $errors->has('password') ? $errors->first('password') : '' }}</div>
                 </div>
                 <div class="form-group">
@@ -63,7 +64,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                 <form action="/profile" method="POST">
+                 <form action="/profile/{{$user->id}}" method="POST">
                  @csrf
                  @method('DELETE')
                 <button type="submit" class="btn btn-danger delete-btn float-right">Delete Account</button>
@@ -72,6 +73,9 @@
             </div>
         </div>
         </div>
+
+
+
     </div>
 </div>
 </section>

@@ -107,7 +107,7 @@
                             </div>
                         </div>
 
-                        <input type="text" class="image" name="photo" value="default.jpg" hidden> 
+                        <input type="text" class="image" name="photo" value="default.jpg" hidden>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
