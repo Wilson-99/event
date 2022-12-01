@@ -1,7 +1,9 @@
 @extends('layouts.app')
+@section('title', $title)
 
 @section('content')
-
+ @include('layouts.sidebar')
+    <div class="py-2 col-lg-9">
     <main>
          <!-- Events Table -->
         <div class="card">
@@ -12,13 +14,14 @@
         <div class="card-body">
         <table class="table table-striped table-hover" id="datatables">
         <thead>
-            <tr class="text-center">
-            <th scope="col">#</th>
-            <th scope="col">Image</th>
-            <th scope="col">Title</th>
-            <th scope="col">Infraestructure</th>
-            <th scope="col">Schedule</th>
-            <th scope="col">Actions</th>
+            <tr>
+            <th scope="col" class="text-center">#</th>
+            <th scope="col" class="text-center">Image</th>
+            <th scope="col" class="text-center">Title</th>
+            <th scope="col" class="text-center">Infraestructure</th>
+            <th scope="col" class="text-center">Type</th>
+            <th scope="col" class="text-center">Schedule</th>
+            <th scope="col" class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -31,8 +34,10 @@
             {{$item}}{{($loop->last)? ' ' : ', '}}
             @endforeach
             </td>
+             <td>{{$event->private}}</td>
             <td>{{$event->date->format('d-m-Y')}} {{$event->time}}</td>
-            <td><a href="edit/{{$event->id}}" class="btn btn-info"><i class="fa-solid fa-user-pen"></i></a>
+            <td><a href="{{route('view', ['event' => $id])}}" class="btn btn-secondary"><i class="fa-solid fa-eye"></i></a>
+            <a href="edit/{{$event->id}}" class="btn btn-info"><i class="fa-solid fa-user-pen"></i></a>
             <form action="delete/{{$event->id}}" method="POST">
             @csrf
             @method('DELETE')
@@ -46,6 +51,7 @@
         </div>
         <!-- END Events Table -->
 </main>
+</div>
 @endsection
 
 

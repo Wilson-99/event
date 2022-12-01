@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -11,11 +12,6 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     /**
      * Show the application dashboard.
      *
@@ -23,6 +19,23 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $search = request('search');
+
+        if($search){
+            $events = Event::where([
+                ['title','like','%'.$search.'%']
+            ])->get();
+        }else{
+            $events = Event::all();
+        }
+
+        return view('home', ['events'=>$events,'search'=>$search]);
     }
+
+    public function painel(){
+        $user = auth()->user();
+        $eventAsParticipant = $user->eventAsParticipant;
+        return view('users.painel', ['eventAsParticipant' => $eventAsParticipant]);
+    }
+
 }

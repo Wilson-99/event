@@ -17,23 +17,23 @@ class UserController extends Controller
     }
 
     public function index(){
-        return view('profile', array('user' => Auth::user()));
+        return view('profile', ['title' => 'profile']);
     }
 
     public function show(){
         $user = User::all();
-        return view('users.index', ['user' => 'users', 'users' => $user]);
+        return view('users.index', ['title' => 'users' ,'user' => 'users', 'users' => $user]);
     }
 
     public function create(){
         $user = Auth::user();
-        return view('users.create', ['user' => 'users', 'users' => $user]);
+        return view('users.create', ['title'=>'create','user' => 'users', 'users' => $user]);
     }
 
     public function edit($id){
         $user = auth()->user();
         $user = User::findOrFail($id);
-        return view('users.edit', [ 'user' => $user]);
+        return view('users.edit', ['title'=>'edit', 'user' => $user]);
     }
 
     public function store(UserStoreRequest $request){
@@ -84,7 +84,7 @@ class UserController extends Controller
         'email' => $request->email,
         'phone' => $request->phone,
         'city' => $request->city,
-        'user_type' => $request->user_type
+        'user_type' => (empty($request->user_type)) ? $user->user_type : $user->user_type
         ]);
         $user->save();
         return view('home')->with('msg', 'Updated Successfuly!');

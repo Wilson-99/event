@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', $title)
 
 @section('content')
 
@@ -10,7 +11,6 @@
     <form action="{{route('update1', ['user' => $user ])}}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
-
     <div class="form-group">
         <label for="name">Full Name</label>
             <input type="text" name="name" id="name" placeholder="Name" class="form-control @error('name') is-invalid @enderror" value="{{$user->name}}">
@@ -32,12 +32,13 @@
         <div class="invalid-feedback"><ion-icon name="alert"></ion-icon> {{ $errors->has('city') ? $errors->first('city') : '' }}</div>
     </div>
 
-
+        <div class="form-group">
            <select name="user_type" id="user_type" class="form-control">
-            @foreach ($user as $user)
-                <option value="{{$user->id}}">{{$user->user_type}}<option>
-            @endforeach
+            <option>»»Select User_Type««</option>
+            <option value="user">user</option>
+            <option value="admin">admin</option>
            </select>
+        </div>
 
     <input type="submit" value="Update user" class="btn btn-primary">
 </form>

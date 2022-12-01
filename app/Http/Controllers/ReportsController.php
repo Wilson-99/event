@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReportsController extends Controller
@@ -13,6 +14,8 @@ class ReportsController extends Controller
     }
 
     public function index(){
-        return view('reports');
+        $event = Event::latest()->get();
+        $user = User::latest()->get();
+        return view('admin.reports', ['title' => 'reports', 'events' => $event, 'users' => $user]);
     }
 }

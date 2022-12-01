@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+
+Route::get('events/{id}', [App\Http\Controllers\EventsController::class, 'event']);
 
 Auth::routes();
 
@@ -42,6 +42,16 @@ Route::get('user/edit/{id}', [App\Http\Controllers\UserController::class, 'edit'
 
 Route::get('admin', [App\Http\Controllers\AdminController::class, 'index'])->name('admin')->middleware('auth');
 
+Route::get('admin/create', [App\Http\Controllers\AdminController::class, 'create'])->name('admin/create')->middleware('auth');
+
+Route::post('admin/store', [App\Http\Controllers\AdminController::class, 'store'])->name('admin/store')->middleware('auth');
+
+Route::get('admin/edit/{id}', [App\Http\Controllers\AdminController::class, 'edit'])->name('admin/edit')->middleware('auth');
+
+Route::put('admin/update/{task}', [App\Http\Controllers\AdminController::class, 'update'])->name('admin/update')->middleware('auth');
+
+Route::delete('admin/delete/{id}', [App\Http\Controllers\AdminController::class, 'destroy'])->name('admin/delete')->middleware('auth');
+
 Route::get('events', [App\Http\Controllers\EventsController::class, 'index'])->name('events')->middleware('auth');
 
 Route::get('edit/{id}', [App\Http\Controllers\EventsController::class, 'edit'])->name('edit')->middleware('auth');
@@ -54,7 +64,13 @@ Route::get('create', [App\Http\Controllers\EventsController::class, 'create'])->
 
 Route::post('store', [App\Http\Controllers\EventsController::class, 'store'])->name('store')->middleware('auth');
 
+Route::post('/events/join/{id}', [App\Http\Controllers\EventsController::class, 'joinEvent'])->middleware('auth');
+
+Route::delete('/events/leave/{id}', [App\Http\Controllers\EventsController::class, 'leaveEvent'])->middleware('auth');
+
 Route::get('reports', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports')->middleware('auth');
 
-Route::get('search', [App\Http\Controllers\SearchController::class, 'index'])->name('search')->middleware('auth');
+Route::get('painel', [App\Http\Controllers\HomeController::class, 'painel'])->name('painel')->middleware('auth');
+
+Route::get('view/{id}', [App\Http\Controllers\EventsController::class, 'view'])->name('view')->middleware('auth');
 

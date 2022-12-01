@@ -1,7 +1,9 @@
 @extends('layouts.app')
+@section('title', $title)
 
 @section('content')
-
+ @include('layouts.sidebar')
+<div class="py-2 col-lg-9">
     <main>
 
         <!-- Users Table -->
@@ -51,6 +53,7 @@
         <!-- END Users Table -->
 
 </main>
+</div>
 @endsection
 
 

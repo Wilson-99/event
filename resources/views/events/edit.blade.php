@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', $title)
 
 @section('content')
 
@@ -54,13 +55,12 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="private">Type of event</label>
            <select name="private" id="private" class="form-control">
-            @foreach ($event as $event)
-                <option value="{{$event->id}}">{{$event->private}}<option>
-            @endforeach
+           <option>»»Select Event_Type««</option>
+             <option value="0">Public</option>
+            <option value="1">Private</option>
            </select>
-    </div>
+        </div>
     <input type="submit" value="Update Event" class="btn btn-primary">
 </form>
 
